@@ -5,7 +5,7 @@ from starlette import status
 from auth.db.connection import get_session
 from auth.schemas import HealthCheckResponse
 
-#from auth.services import health_check_db
+# from auth.services import health_check_db
 
 
 api_router = APIRouter(
@@ -24,7 +24,8 @@ async def ping_application(
 ):
     return {"message": "Application alive!"}
 
-'''
+
+"""
 @api_router.get(
     "/ping_database",
     response_model=HealthCheckResponseh6j6;m7 :<<PHG,
@@ -41,4 +42,4 @@ async def ping_database(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         detail="Database isn't working",
     )
-'''
+"""
