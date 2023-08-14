@@ -18,7 +18,7 @@ db:  ##@Database Create database with docker-compose
 	docker-compose -f docker-compose.yml up -d --remove-orphans
 
 migrate:  ##@Database Do all migrations in database
-	cd $(APPLICATION_NAME)/db && alembic upgrade $(args)
+	cd $(APPLICATION_NAME)/db && poetry run alembic upgrade HEAD
 
 run:  ##@Application Run application server
 	poetry run python3 -m $(APPLICATION_NAME)

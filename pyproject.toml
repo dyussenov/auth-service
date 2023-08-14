@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["dyussenov <dyusenov.aset.arm@gmail.com>"]
 readme = "README.md"
-packages = [{include = "auth_service"}]
+packages = [ { include = "**/*.py", from = "."  }]
 
 [tool.poetry.dependencies]
 python = "^3.11"

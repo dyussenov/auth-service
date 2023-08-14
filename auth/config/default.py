@@ -18,7 +18,7 @@ class DefaultSettings(BaseSettings):
     APP_HOST: str = environ.get("APP_HOST", "http://127.0.0.1")
     APP_PORT: int = int(environ.get("APP_PORT", 8000))
 
-    POSTGRES_DB: str = environ.get("POSTGRES_DB", "bookmarker_db")
+    POSTGRES_DB: str = environ.get("POSTGRES_DB", "auth")
     POSTGRES_HOST: str = environ.get("POSTGRES_HOST", "localhost")
     POSTGRES_USER: str = environ.get("POSTGRES_USER", "user")
     POSTGRES_PORT: int = int(environ.get("POSTGRES_PORT", "5432")[-4:])
