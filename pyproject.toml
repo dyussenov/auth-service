@@ -11,7 +11,7 @@ python = "^3.11"
 fastapi = "^0.100.0"
 python-multipart = "^0.0.6"
 pydantic-settings = "^2.0.2"
-pydantic = "^2.0.3"
+pydantic = {extras = ["email"], version = "^2.1.1"}
 sqlalchemy = "^2.0.19"
 sqlalchemy-utils = "^0.41.1"
 uvicorn = "^0.23.1"
@@ -20,6 +20,8 @@ psycopg2-binary = "^2.9.6"
 passlib = "^1.7.4"
 alembic = "^1.11.1"
 asyncpg = "^0.28.0"
+pydantic-extra-types = "^2.0.0"
+phonenumbers = "^8.13.18"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -4,9 +4,7 @@ from starlette import status
 
 from auth.db.connection import get_session
 from auth.schemas import HealthCheckResponse
-
 from auth.services import health_check_db
-
 
 api_router = APIRouter(
     prefix="/health_check",
@@ -29,7 +27,9 @@ async def ping_application(
     "/ping_database",
     response_model=HealthCheckResponse,
     status_code=status.HTTP_200_OK,
-    responses={status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Database isn't working"}},
+    responses={
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Database isn't working"}
+    },
 )
 async def ping_database(
     _: Request,

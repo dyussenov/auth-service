@@ -6,13 +6,6 @@ from pydantic_settings import BaseSettings
 
 
 class DefaultSettings(BaseSettings):
-    """
-    Default configs for application.
-
-    Usually, we have three environments: for development, testing and production.
-    But in this situation, we only have standard settings for local development.
-    """
-
     ENV: str = environ.get("ENV", "local")
     PATH_PREFIX: str = environ.get("PATH_PREFIX", "/auth")
     APP_HOST: str = environ.get("APP_HOST", "http://127.0.0.1")
@@ -26,14 +19,13 @@ class DefaultSettings(BaseSettings):
     DB_CONNECT_RETRY: int = environ.get("DB_CONNECT_RETRY", 20)
     DB_POOL_SIZE: int = environ.get("DB_POOL_SIZE", 15)
 
-    # to get a string like this run: "openssl rand -hex 32"
     SECRET_KEY: str = environ.get("SECRET_KEY", "")
     ALGORITHM: str = environ.get("ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(
         environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", 1440)
     )
 
-    # PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    PWD_CONTEXT: CryptContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
     # OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl=f"{APP_HOST}:{APP_PORT}{PATH_PREFIX}/user/authentication")
 
     @property
