@@ -15,10 +15,10 @@ format:  ##@Code Reformat code with isort and black
 	poetry run python3 -m black $(CODE)
 
 db:  ##@Database Create database with docker-compose
-	docker-compose -f docker-compose.yml up -d --remove-orphans
+	docker compose -f docker-compose.yml up -d --remove-orphans
 
 migrate:  ##@Database Do all migrations in database
-	cd $(APPLICATION_NAME)/db && poetry run alembic upgrade HEAD
+	poetry run alembic upgrade head
 
 run:  ##@Application Run application server
 	poetry run python3 -m $(APPLICATION_NAME)

@@ -21,10 +21,12 @@ class DefaultSettings(BaseSettings):
 
     SECRET_KEY: str = environ.get("SECRET_KEY", "")
     ALGORITHM: str = environ.get("ALGORITHM", "HS256")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(
-        environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", 1440)
+    ACCESS_TOKEN_EXPIRE_SECONDS: int = int(
+        environ.get("ACCESS_TOKEN_EXPIRE_SECONDS", 360)
     )
-
+    REFRESH_TOKEN_EXPIRE_SECONDS: int = int(
+        environ.get("REFRESH_TOKEN_EXPIRE_SECONDS", 345600)
+    )
     PWD_CONTEXT: CryptContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
     # OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl=f"{APP_HOST}:{APP_PORT}{PATH_PREFIX}/user/authentication")
 

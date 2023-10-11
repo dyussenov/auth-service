@@ -10,7 +10,6 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 
-
 # revision identifiers, used by Alembic.
 revision: str = '0d2e42eb0cd6'
 down_revision: Union[str, None] = 'cbf5959bdb90'
@@ -27,6 +26,7 @@ def upgrade():
         sa.Column('hashed_password', sa.String(length=60), nullable=False),
         sa.Column('is_verified', sa.Boolean(), server_default=sa.false(), nullable=False),
     )
+
 
 def downgrade():
     op.drop_table('users')

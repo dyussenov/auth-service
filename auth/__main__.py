@@ -7,7 +7,7 @@ from auth.endpoints import list_of_routes
 
 def bind_routes(application: FastAPI, setting: DefaultSettings) -> None:
     """
-    Собрать роутеры ендпоинтов, байндим к приложению по префиксу из настроек.
+    Собрать 1  ендпоинтов, байндим к приложению по префиксу из настроек.
     """
     for route in list_of_routes:
         application.include_router(route, prefix=setting.PATH_PREFIX)

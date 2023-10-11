@@ -18,3 +18,6 @@ class User(DeclarativeBase):
     phone: Mapped[str] = mapped_column(VARCHAR(12), unique=True)
     hashed_password: Mapped[str] = mapped_column(VARCHAR(60))
     is_verified: Mapped[bool] = mapped_column(default=False)
+
+    def __str__(self):
+        return f"user: {self.user_id}, phone: {self.phone}"
