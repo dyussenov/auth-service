@@ -4,10 +4,25 @@ from sqlalchemy import exc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from jose import jwt
+from jose.jwt import JWTError
 
 from auth.db.models import User
 from auth.schemas import SignupRequest, LoginResponse
 from auth.config import get_settings
+
+
+async def validate_token(refresh_token: str, session: AsyncSession):
+    settings = get_settings()
+
+    try:
+        e = jwt.decode(refresh_token, settings.SECRET_KEY)
+        print(e)
+    except JWTError:
+        raise Exception
+    return {
+        'access_token': 'qwerty',
+        'refresh_token': 'aasdfg'
+    }
 
 
 async def create_user(
