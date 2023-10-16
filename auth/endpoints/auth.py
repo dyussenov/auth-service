@@ -6,6 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from auth.db.connection import get_session
 from auth.schemas import SignupRequest, SignupSuccess, LoginRequest, LoginResponse, TokenResponse, TokenRequest
 from auth.services import create_user, authenticate_user, validate_token
+from auth.exceptions import AuthException
 from auth.config import get_settings
 
 api_router = APIRouter(
@@ -57,8 +58,9 @@ async def login(
 ):
     try:
         return await authenticate_user(session, login_form.phone, login_form.password)
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='wrong credentials')
+    except AuthException as exception:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exception))
 
 
 @api_router.post(
@@ -74,12 +76,14 @@ async def login(
 async def refresh(
         _: Request,
         data: TokenRequest,
-        session: AsyncSession = Depends(get_session),
 ):
+    """
+    Логика работы: прикладываешь рефреш, получаешь пару акцесс+рефреш. старый рефреш становится недействительным
+    """
     try:
-        return await validate_token(data.refresh_token, session)
-    except Exception:
+        return await validate_token(data.refresh_token)
+    except AuthException as exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='invalid refresh token'
+            detail=str(exception)
         )

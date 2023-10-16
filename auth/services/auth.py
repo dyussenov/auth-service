@@ -9,20 +9,7 @@ from jose.jwt import JWTError
 from auth.db.models import User
 from auth.schemas import SignupRequest, LoginResponse
 from auth.config import get_settings
-
-
-async def validate_token(refresh_token: str, session: AsyncSession):
-    settings = get_settings()
-
-    try:
-        e = jwt.decode(refresh_token, settings.SECRET_KEY)
-        print(e)
-    except JWTError:
-        raise Exception
-    return {
-        'access_token': 'qwerty',
-        'refresh_token': 'aasdfg'
-    }
+from auth.exceptions import AuthException
 
 
 async def create_user(
@@ -75,7 +62,7 @@ async def authenticate_user(
     user = result.scalar()
     settings = get_settings()
     if not user:
-        raise Exception  # todo exeption
+        raise AuthException("wrong phone or paasword")
 
     if verify_password(plain_password, user.hashed_password):
         return LoginResponse(
@@ -83,4 +70,17 @@ async def authenticate_user(
             refresh_token=create_token(user.user_id, settings.REFRESH_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY)
         )
     else:
-        raise Exception  # todo exeption
+        raise AuthException("wrong phone or paasword")
+
+
+async def validate_token(refresh_token: str):
+    settings = get_settings()
+
+    try:
+        payload = jwt.decode(refresh_token, settings.SECRET_KEY)
+        return {
+            'access_token': create_token(payload['sub'], settings.ACCESS_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY),
+            'refresh_token': create_token(payload['sub'], settings.REFRESH_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY),
+        }
+    except JWTError:
+        raise AuthException("invalid JWT")
