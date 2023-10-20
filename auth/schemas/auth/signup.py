@@ -1,8 +1,15 @@
 from pydantic import BaseModel, EmailStr, validator
-from pydantic_extra_types.phone_numbers import PhoneNumber
 
-from auth.db.models import UserType
 from auth.config import get_settings
+from auth.db.models import UserType
+
+
+class UserResponse(BaseModel):
+    email: EmailStr
+    phone: str
+    name: str
+    surname: str
+    #user_type: UserType = UserType.individual
 
 
 class SignupRequest(BaseModel):
@@ -18,7 +25,7 @@ class SignupRequest(BaseModel):
         settings = get_settings()
         hashed_password = settings.PWD_CONTEXT.hash(password)
         return hashed_password
-    
+
 
 class SignupSuccess(BaseModel):
     message: str

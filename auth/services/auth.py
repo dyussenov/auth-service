@@ -1,15 +1,16 @@
 from datetime import datetime, timedelta
 
+from jose import jwt
+from jose.jwt import JWTError
 from sqlalchemy import exc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from jose import jwt
-from jose.jwt import JWTError
+from pydantic import parse_obj_as
 
-from auth.db.models import User
-from auth.schemas import SignupRequest, LoginResponse
 from auth.config import get_settings
+from auth.db.models import User
 from auth.exceptions import AuthException
+from auth.schemas import LoginResponse, SignupRequest, UserResponse
 
 
 async def create_user(
@@ -31,13 +32,14 @@ async def create_user(
     return True, "Successful registration!"
 
 
-def create_token(sub, exp, jwt_secret):
+def create_token(sub, exp, jwt_secret, user):
     now = datetime.utcnow()
     payload = {
         'iat': now,
         'nbf': now,
         'exp': now + timedelta(seconds=exp),
         'sub': sub,
+        'user': user
     }
     token = jwt.encode(
         payload,
@@ -68,9 +70,16 @@ async def authenticate_user(
         raise AuthException("wrong phone or paasword")
 
     if verify_password(plain_password, user.hashed_password):
+        user_dict = UserResponse(
+            email=user.email,
+            phone=user.phone,
+            name=user.name,
+            surname=user.surname,
+            user_type=user.user_type
+        )
         return LoginResponse(
-            access_token=create_token(user.user_id, settings.ACCESS_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY),
-            refresh_token=create_token(user.user_id, settings.REFRESH_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY)
+            access_token=create_token(user.user_id, settings.ACCESS_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY, user_dict.model_dump()),
+            refresh_token=create_token(user.user_id, settings.REFRESH_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY,user_dict.model_dump())
         )
     else:
         raise AuthException("wrong phone or paasword")
@@ -82,8 +91,8 @@ async def validate_token(refresh_token: str):
     try:
         payload = jwt.decode(refresh_token, settings.SECRET_KEY)
         return {
-            'access_token': create_token(payload['sub'], settings.ACCESS_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY),
-            'refresh_token': create_token(payload['sub'], settings.REFRESH_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY),
+            'access_token': create_token(payload['sub'], settings.ACCESS_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY, payload['user']),
+            'refresh_token': create_token(payload['sub'], settings.REFRESH_TOKEN_EXPIRE_SECONDS, settings.SECRET_KEY, payload['user']),
         }
     except JWTError:
         raise AuthException("invalid JWT")

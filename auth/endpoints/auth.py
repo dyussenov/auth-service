@@ -1,13 +1,13 @@
-from fastapi import APIRouter, Body, Depends, HTTPException, Request, Header
+from fastapi import APIRouter, Body, Depends, HTTPException, Request
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
-from fastapi.security import OAuth2PasswordBearer
 
 from auth.db.connection import get_session
-from auth.schemas import SignupRequest, SignupSuccess, LoginRequest, LoginResponse, TokenResponse, TokenRequest
-from auth.services import create_user, authenticate_user, validate_token
 from auth.exceptions import AuthException
-from auth.config import get_settings
+from auth.schemas import (LoginRequest, LoginResponse, SignupRequest,
+                          SignupSuccess, TokenRequest, TokenResponse)
+from auth.services import authenticate_user, create_user, validate_token
 
 api_router = APIRouter(
     prefix="",

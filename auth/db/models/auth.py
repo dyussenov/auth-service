@@ -1,7 +1,7 @@
-from uuid import uuid4
 from enum import Enum
+from uuid import uuid4
 
-from sqlalchemy.dialects.postgresql import VARCHAR, ENUM
+from sqlalchemy.dialects.postgresql import ENUM, VARCHAR
 from sqlalchemy.orm import Mapped, mapped_column
 
 from auth.db import DeclarativeBase

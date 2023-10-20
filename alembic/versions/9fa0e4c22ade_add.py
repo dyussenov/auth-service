@@ -1,8 +1,4 @@
 from alembic import op
-from sqlalchemy import Column, VARCHAR, Boolean, Enum
-from sqlalchemy.dialects.postgresql import ENUM
-
-from enum import Enum
 from typing import Sequence, Union
 
 # revision identifiers, used by Alembic.
