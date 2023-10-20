@@ -17,6 +17,9 @@ format:  ##@Code Reformat code with isort and black
 db:  ##@Database Create database with docker-compose
 	docker compose -f docker-compose.yml up -d --remove-orphans
 
+revision:
+	alembic revision --autogenerate -m "$(name)"
+
 migrate:  ##@Database Do all migrations in database
 	poetry run alembic upgrade head
 

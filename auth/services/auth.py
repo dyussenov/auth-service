@@ -18,6 +18,9 @@ async def create_user(
     user = User(
         email=potential_user.email,
         phone=potential_user.phone,
+        name=potential_user.name,
+        surname=potential_user.surname,
+        user_type=potential_user.user_type,
         hashed_password=potential_user.password,
     )
     session.add(user)
