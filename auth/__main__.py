@@ -48,6 +48,7 @@ if __name__ == "__main__":
     run(
         "auth.__main__:app",
         port=settings_for_application.APP_PORT,
+        host="0.0.0.0",
         reload=True,
         reload_dirs=["auth", "tests"],
         log_level="debug",

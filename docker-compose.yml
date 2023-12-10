@@ -2,6 +2,7 @@ version: '3'
 services:
   psql:
     image: postgres
+    hostname: "auth-db"
     restart: always
     environment:
       POSTGRES_DB: auth
@@ -11,6 +12,21 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - auth-network
+
+  app:
+    build: .
+    command: poetry run python3 -m auth
+    ports:
+      - "8000:8000"
+    networks:
+      - auth-network
+
 
 volumes:
   postgres_data:
+
+networks:
+  auth-network:
+    name: auth-network
