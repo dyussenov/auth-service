@@ -11,3 +11,4 @@ services:
 networks:
   default:
     name: nexus-network
+    external: true
