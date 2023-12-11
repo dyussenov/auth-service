@@ -1,0 +1,13 @@
+version: '3'
+services:
+  app:
+    build: .
+    command: poetry run python3 -m auth
+    labels:
+    #  - "traefik.enable=true"
+    #  - "traefik.http.routers.nexus-catalog-public.rule=Host(`auth.dev.nexuspro.kz`)"
+    #  - "traefik.http.routers.whoami.entrypoints=web"
+
+networks:
+  default:
+    name: nexus-network
