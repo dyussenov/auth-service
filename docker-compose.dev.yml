@@ -4,8 +4,8 @@ services:
     build: .
     command: poetry run python3 -m auth
     labels:
-    #  - "traefik.enable=true"
-    #  - "traefik.http.routers.nexus-catalog-public.rule=Host(`auth.dev.nexuspro.kz`)"
+      - "traefik.enable=true"
+      - "traefik.http.routers.nexus-catalog-public.rule=Host(`auth-dev-nexuspro.webdsm.kz`)"
     #  - "traefik.http.routers.whoami.entrypoints=web"
 
 networks:

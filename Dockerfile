@@ -17,4 +17,6 @@ COPY . /app
 
 RUN chmod +x /app/wait-for-db.sh
 
+EXPOSE 8000
+
 ENTRYPOINT ["/app/wait-for-db.sh"]

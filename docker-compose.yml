@@ -2,7 +2,7 @@ version: '3'
 services:
   psql:
     image: postgres
-    hostname: "auth-db"
+    hostname: "nexus-db"
     restart: always
     environment:
       POSTGRES_DB: auth
