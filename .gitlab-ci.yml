@@ -6,7 +6,7 @@ variables:
   DEV_REPO_PATH: /srv/nexuspro/services/auth-service
 
 before_script:
-  - 'which ssh-agent || (apt-get update -y && apt-get install openssh-client -y)'
+  - 'which ssh-agent || (apk update -y && apk add openssh-client -y)'
   - eval $(ssh-agent -s)
   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
   - mkdir -p ~/.ssh
