@@ -15,8 +15,8 @@ before_script:
 deploy_dev:
   stage: deploy
   script:
-    - ssh -o StrictHostKeyChecking=no glitch@$192.168.0.13 -p 22 "cd $DEV_REPO_PATH && git pull origin dev"
-    - ssh -o StrictHostKeyChecking=no glitch@$192.168.0.13 -p 22 "cd $DEV_REPO_PATH && docker compose up -d --build"
+    - ssh -o StrictHostKeyChecking=no glitch@192.168.0.13 -p 22 "cd $DEV_REPO_PATH && git pull origin dev"
+    - ssh -o StrictHostKeyChecking=no glitch@192.168.0.13 -p 22 "cd $DEV_REPO_PATH && docker compose up -d --build"
   only:
     - master
   
