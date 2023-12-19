@@ -6,7 +6,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nexus-catalog-public.rule=Host(`auth-dev-nexuspro.webdsm.kz`)"
-    #  - "traefik.http.routers.whoami.entrypoints=web"
 
 networks:
   default:
