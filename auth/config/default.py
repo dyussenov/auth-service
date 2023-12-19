@@ -12,7 +12,7 @@ class DefaultSettings(BaseSettings):
     APP_PORT: int = int(environ.get("APP_PORT", 8000))
 
     POSTGRES_DB: str = environ.get("POSTGRES_DB", "auth")
-    POSTGRES_HOST: str = environ.get("POSTGRES_HOST", "localhost")
+    POSTGRES_HOST: str = environ.get("POSTGRES_HOST", "nexus-db")
     POSTGRES_USER: str = environ.get("POSTGRES_USER", "user")
     POSTGRES_PORT: int = int(environ.get("POSTGRES_PORT", "5432")[-4:])
     POSTGRES_PASSWORD: str = environ.get("POSTGRES_PASSWORD", "hackme")
@@ -35,12 +35,19 @@ class DefaultSettings(BaseSettings):
         """
         Get all settings for connection with database.
         """
-        return {
+        '''return {
             "database": self.POSTGRES_DB,
             "user": self.POSTGRES_USER,
             "password": self.POSTGRES_PASSWORD,
             "host": self.POSTGRES_HOST,
             "port": self.POSTGRES_PORT,
+        }'''
+        return {
+            "database": "auth",
+            "user": "user",
+            "password": "hackme",
+            "host": "nexus-db",
+            "port": 5432,
         }
 
     @property
@@ -64,3 +71,4 @@ class DefaultSettings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+
