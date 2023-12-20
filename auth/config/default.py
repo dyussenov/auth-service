@@ -35,19 +35,12 @@ class DefaultSettings(BaseSettings):
         """
         Get all settings for connection with database.
         """
-        '''return {
+        return {
             "database": self.POSTGRES_DB,
             "user": self.POSTGRES_USER,
             "password": self.POSTGRES_PASSWORD,
             "host": self.POSTGRES_HOST,
             "port": self.POSTGRES_PORT,
-        }'''
-        return {
-            "database": "auth",
-            "user": "user",
-            "password": "hackme",
-            "host": "nexus-db",
-            "port": 5432,
         }
 
     @property
@@ -55,6 +48,9 @@ class DefaultSettings(BaseSettings):
         """
         Get uri for connection with database.
         """
+        print("postgresql+asyncpg://{user}:{password}@{host}:{port}/{database}".format(
+            **self.database_settings,
+        ))
         return "postgresql+asyncpg://{user}:{password}@{host}:{port}/{database}".format(
             **self.database_settings,
         )

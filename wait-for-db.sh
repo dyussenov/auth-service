@@ -4,7 +4,7 @@ cmd="$@"
 
 echo "Waiting for postgres..."
 
-while ! nc -z nexus-db 5432; do
+while ! nc -z $POSTGRES_HOST 5432; do
   sleep 0.1
 done
 
