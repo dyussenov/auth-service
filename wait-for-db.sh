@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/
+
+if [ ! -f .env ]
+then
+  export $(cat .env | xargs)
+fi
 
 cmd="$@"
 
