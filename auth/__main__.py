@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from uvicorn import run
+from fastapi.middleware.cors import CORSMiddleware
 
 from auth.config import DefaultSettings, get_settings
 from auth.endpoints import list_of_routes
@@ -41,6 +42,15 @@ def get_app() -> FastAPI:
 
 
 app = get_app()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 if __name__ == "__main__":
     settings_for_application = get_settings()
