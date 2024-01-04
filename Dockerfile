@@ -15,7 +15,7 @@ RUN apt-get update \
 
 COPY . /app
 
-RUN chmod +x /app/wait-for-db.sh
+RUN chmod +x /app/entrypoint.sh
 EXPOSE 8000
 
 ENTRYPOINT ["/app/wait-for-db.sh"]

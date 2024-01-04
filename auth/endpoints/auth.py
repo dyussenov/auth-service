@@ -5,8 +5,14 @@ from starlette import status
 
 from auth.db.connection import get_session
 from auth.exceptions import AuthException
-from auth.schemas import (LoginRequest, LoginResponse, SignupRequest,
-                          SignupSuccess, TokenRequest, TokenResponse)
+from auth.schemas import (
+    LoginRequest,
+    LoginResponse,
+    SignupRequest,
+    SignupSuccess,
+    TokenRequest,
+    TokenResponse,
+)
 from auth.services import authenticate_user, create_user, validate_token
 
 api_router = APIRouter(
@@ -28,9 +34,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
     },
 )
 async def signup(
-        _: Request,
-        signup_form: SignupRequest = Body(...),
-        session: AsyncSession = Depends(get_session),
+    _: Request,
+    signup_form: SignupRequest = Body(...),
+    session: AsyncSession = Depends(get_session),
 ):
     is_success, message = await create_user(session, signup_form)
     if is_success:
@@ -52,15 +58,16 @@ async def signup(
     },
 )
 async def login(
-        _: Request,
-        login_form: LoginRequest = Body(...),
-        session: AsyncSession = Depends(get_session),
+    _: Request,
+    login_form: LoginRequest = Body(...),
+    session: AsyncSession = Depends(get_session),
 ):
     try:
         return await authenticate_user(session, login_form.phone, login_form.password)
     except AuthException as exception:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exception))
+            status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exception)
+        )
 
 
 @api_router.post(
@@ -74,8 +81,8 @@ async def login(
     },
 )
 async def refresh(
-        _: Request,
-        data: TokenRequest,
+    _: Request,
+    data: TokenRequest,
 ):
     """
     Логика работы: прикладываешь рефреш, получаешь пару акцесс+рефреш. старый рефреш становится недействительным
@@ -84,6 +91,5 @@ async def refresh(
         return await validate_token(data.refresh_token)
     except AuthException as exception:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=str(exception)
+            status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exception)
         )

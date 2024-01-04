@@ -20,7 +20,9 @@ class UserType(Enum):
 class User(DeclarativeBase):
     __tablename__ = "users"
 
-    user_id: Mapped[str] = mapped_column(VARCHAR(36), primary_key=True, default=_generate_uuid)
+    user_id: Mapped[str] = mapped_column(
+        VARCHAR(36), primary_key=True, default=_generate_uuid
+    )
     email: Mapped[str] = mapped_column(VARCHAR(25), unique=True)
     phone: Mapped[str] = mapped_column(VARCHAR(12), unique=True)
     name: Mapped[str] = mapped_column(VARCHAR(24))

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from uvicorn import run
 from fastapi.middleware.cors import CORSMiddleware
+from uvicorn import run
 
 from auth.config import DefaultSettings, get_settings
 from auth.endpoints import list_of_routes

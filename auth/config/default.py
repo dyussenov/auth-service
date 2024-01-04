@@ -48,9 +48,11 @@ class DefaultSettings(BaseSettings):
         """
         Get uri for connection with database.
         """
-        print("postgresql+asyncpg://{user}:{password}@{host}:{port}/{database}".format(
-            **self.database_settings,
-        ))
+        print(
+            "postgresql+asyncpg://{user}:{password}@{host}:{port}/{database}".format(
+                **self.database_settings,
+            )
+        )
         return "postgresql+asyncpg://{user}:{password}@{host}:{port}/{database}".format(
             **self.database_settings,
         )
@@ -67,4 +69,3 @@ class DefaultSettings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
-
