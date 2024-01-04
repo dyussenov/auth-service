@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  psql:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - auth-network
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    command: poetry run python3 -m auth
+    ports:
+      - "8000:8000"
+    networks:
+      - auth-network
+
+networks:
+  auth-network:
+    name: auth-network
+
+volumes:
+  postgres_data:

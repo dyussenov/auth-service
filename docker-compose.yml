@@ -1,32 +1,11 @@
 version: '3'
+
 services:
-  psql:
-    image: postgres
-    hostname: "nexus-db"
+  db:
+    container_name: 'auth_postgres'
+    image: 'postgres:14'
     restart: always
-    environment:
-      POSTGRES_DB: auth
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: hackme
+    env_file:
+      - ./.env
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - auth-network
-
-  app:
-    build: .
-    command: poetry run python3 -m auth
-    ports:
-      - "8000:8000"
-    networks:
-      - auth-network
-
-
-volumes:
-  postgres_data:
-
-networks:
-  auth-network:
-    name: auth-network
+      - '5432:5432'
