@@ -1,5 +1,5 @@
 APPLICATION_NAME = auth
-CODE = $(APPLICATION_NAME) tests
+CODE = $(APPLICATION_NAME)
 
 # Commands
 env:  ##@Environment Create .env file with variables
