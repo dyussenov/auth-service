@@ -9,7 +9,7 @@ class UserResponse(BaseModel):
     phone: str
     name: str
     surname: str
-    # user_type: UserType = UserType.individual
+    #user_type: UserType = UserType.individual
 
 
 class SignupRequest(BaseModel):

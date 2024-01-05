@@ -1,8 +1,9 @@
 from enum import Enum
 from uuid import uuid4
 
-from sqlalchemy.dialects.postgresql import ENUM, VARCHAR
+from sqlalchemy.dialects.postgresql import ENUM, VARCHAR, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.sql import func
 
 from auth.db import DeclarativeBase
 
@@ -30,6 +31,8 @@ class User(DeclarativeBase):
     hashed_password: Mapped[str] = mapped_column(VARCHAR(60))
     user_type: Mapped[Enum] = mapped_column(ENUM(UserType))
     is_verified: Mapped[bool] = mapped_column(default=False)
+    created_at: Mapped[int] = mapped_column(TIMESTAMP(timezone=False), default=func.now())
+    updated_at: Mapped[int] = mapped_column(TIMESTAMP(timezone=False), onupdate=func.now())
 
     def __str__(self):
         return f"user: {self.user_id}, phone: {self.phone}"
