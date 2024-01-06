@@ -9,7 +9,7 @@ class UserResponse(BaseModel):
     phone: str
     name: str
     surname: str
-    #user_type: UserType = UserType.individual
+    # user_type: UserType = UserType.individual
 
 
 class SignupRequest(BaseModel):
@@ -28,4 +28,12 @@ class SignupRequest(BaseModel):
 
 
 class SignupSuccess(BaseModel):
+    message: str
+
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+
+class PasswordResetResponse(BaseModel):
     message: str

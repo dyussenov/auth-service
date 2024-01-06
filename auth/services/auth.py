@@ -2,8 +2,7 @@ from datetime import datetime, timedelta
 
 from jose import jwt
 from jose.jwt import JWTError
-from pydantic import parse_obj_as
-from sqlalchemy import exc
+from sqlalchemy import exc, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -14,7 +13,7 @@ from auth.schemas import LoginResponse, SignupRequest, UserResponse
 
 
 async def create_user(
-    session: AsyncSession, potential_user: SignupRequest
+        session: AsyncSession, potential_user: SignupRequest
 ) -> User | None:
     user = User(
         email=potential_user.email,
@@ -46,15 +45,27 @@ def create_token(sub, exp, jwt_secret, user):
 
 
 def verify_password(
-    plain_password: str,
-    hashed_password: str,
+        plain_password: str,
+        hashed_password: str,
 ):
     pwd_context = get_settings().PWD_CONTEXT
     return pwd_context.verify(plain_password, hashed_password)
 
 
+def user_helper(user: User) -> dict:
+    """serialize orm user object to python dict"""
+    user_dict = UserResponse(
+        email=user.email,
+        phone=user.phone,
+        name=user.name,
+        surname=user.surname,
+        user_type=user.user_type,
+    )
+    return user_dict.model_dump()
+
+
 async def authenticate_user(
-    session: AsyncSession, phone: str, plain_password: str
+        session: AsyncSession, phone: str, plain_password: str
 ) -> LoginResponse:
     stmt = select(User).where(User.phone == phone)
     result = await session.execute(stmt)
@@ -64,25 +75,19 @@ async def authenticate_user(
         raise AuthException("wrong phone or paasword")
 
     if verify_password(plain_password, user.hashed_password):
-        user_dict = UserResponse(
-            email=user.email,
-            phone=user.phone,
-            name=user.name,
-            surname=user.surname,
-            user_type=user.user_type,
-        )
+        user_dict = user_helper(user)
         return LoginResponse(
             access_token=create_token(
                 user.user_id,
                 settings.ACCESS_TOKEN_EXPIRE_SECONDS,
                 settings.SECRET_KEY,
-                user_dict.model_dump(),
+                user_dict,
             ),
             refresh_token=create_token(
                 user.user_id,
                 settings.REFRESH_TOKEN_EXPIRE_SECONDS,
                 settings.SECRET_KEY,
-                user_dict.model_dump(),
+                user_dict,
             ),
         )
     else:
@@ -110,3 +115,46 @@ async def validate_token(refresh_token: str):
         }
     except JWTError:
         raise AuthException("invalid JWT")
+
+
+async def send_password_reset(
+        session: AsyncSession,
+        email: str
+) -> bool:
+    stmt = select(User).where(User.email == email)
+    result = await session.execute(stmt)
+    user = result.scalar()
+    settings = get_settings()
+    if user:
+        reset_password_token = create_token(
+            user.user_id,
+            settings.REFRESH_TOKEN_EXPIRE_SECONDS,
+            settings.SECRET_KEY,
+            user_helper(user),
+        )
+        # todo: send token
+        print(reset_password_token)
+
+    return True
+
+
+async def confirm_password_reset(
+        token: str,
+        new_password: str,
+        session: AsyncSession,
+):
+    settings = get_settings()
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY)
+    except JWTError:
+        raise AuthException("invalid JWT")
+
+    stmt = select(User).where(User.email == payload["user"]["email"])
+    result = await session.execute(stmt)
+    user = result.scalar()
+
+    new_hashed_password = settings.PWD_CONTEXT.hash(new_password)
+    stmt = update(User).where(User.email == payload["user"]["email"]).values(name='zaloopa')
+    print(stmt)
+    res = await session.execute(stmt)
+    print(res)
